@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "ef-sample-blocks/publication-date",
+    "version": "1.0",
+    "title": "Publication Date",
+    "category": "text",
+    "description": "Displays the publication date of a post or page with some additional formatting options.",
+    "textdomain": "ef-publication-date",
+    "attributes": {
+        "dateFormat": {
+            "type": "string"
+        },
+        "prependText": {
+            "type": "string"
+        },
+        "displayModified": {
+            "type": "boolean"
+        }
+    },
+    "editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}

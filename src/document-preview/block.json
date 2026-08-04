@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ef-sample-blocks/document-preview",
+	"version": "1.0",
+	"title": "Document Preview",
+	"category": "widgets",
+	"icon": "text-page",
+	"description": "Embeds a preview of a PDF or MS Office document.",
+	"supports": {
+		"html": false,
+		"align": false,
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"documentTitle": {
+			"type": "string"
+		},
+		"description": {
+			"type": "string"
+		},
+		"mediaId": {
+			"type": "integer"
+		}
+	},
+	"textdomain": "ef-document-preview",
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php",
+	"style": "file:./style-index.css"
+}
