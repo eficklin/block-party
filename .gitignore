@@ -38,6 +38,7 @@ build-wp
 node_modules
 gutenberg.zip
 coverage
+vendor
 .phpunit.result.cache
 .reassure
 

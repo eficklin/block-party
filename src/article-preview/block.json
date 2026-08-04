@@ -1,0 +1,38 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "block-party/article-preview",
+	"version": "1.0",
+	"title": "Article Preview",
+	"category": "widgets",
+	"description": "Preview card for external links using open graph tags",
+	"supports": {
+		"html": false,
+		"anchor": true
+	},
+	"attributes": {
+		"url": {
+			"type": "string"
+		},
+		"layout": {
+			"type": "string",
+			"default": "list"
+		},
+		"titleOverride": {
+			"type": "string"
+		},
+		"descriptionOverride": {
+			"type": "string"
+		},
+		"imageURLOverride": {
+			"type": "string"
+		},
+		"imageAltOverride": {
+			"type": "string"
+		}
+	},
+	"textdomain": "article-preview",
+	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

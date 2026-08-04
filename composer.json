@@ -1,0 +1,6 @@
+{
+    "require": {
+        "embed/embed": "^4.4",
+        "guzzlehttp/psr7": "^2.8"
+    }
+}
