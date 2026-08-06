@@ -1,28 +1,48 @@
 <?php
 /**
- * Back-end functionality to support eh Article Preview block.
+ * Back-end functionality to support the Article Preview block.
  */
 
 namespace BlockParty\ArticlePreview;
 
-// Helper for fetching the actual OG data from supplied URL.
-// Will need caching of tags at least. Would we want to get fancy and fetch the image and store in media lib?
-function fetch_open_graph( $url ) {
+const HASH_ALGO = 'sha256'; // Hashing algorithm to use to generate cache keys.
+const CACHE_EXPIRATION = DAY_IN_SECONDS; // Maximum cache lifetime;
+const UA_STRING = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0';
+
+/**
+ * Helper for fetching the open graph data from supplied URL.
+ * 
+ * @param string $url          The url to fetch OG tags from.
+ * @param bool   $bypass_cache Bypass the cache? Default is false.
+ * @return array
+ */
+function fetch_open_graph( $url, $bypass_cache = false ) {
+	// Check for cached values first.
+	$cache_key    = 'article_preview_' . hash( HASH_ALGO, $url );
+	$cached_fetch = get_transient( $cache_key );
+
+	if ( ! empty( $cached_fetch ) && $bypass_cache === false ) {
+		return $cached_fetch;
+	}
+
+	// Nothing in the cache, start fetching.
 	$open_graph_tags = [];
 
 	try {
 		$client = new \Embed\Http\CurlClient();
 		$client->setSettings([
-			'user_agent' => 'Mozilla/5.0 (compatible; SimpleScraper)'
+			'user_agent' => UA_STRING,
 		]);
 		$embed  = new \Embed\Embed( new \Embed\Http\Crawler( $client ) );
 		$info   = $embed->get( $url );
+
+		error_log( print_r( $info, true) );
 		
 		$open_graph_tags['title']       = $info->title;
 		$open_graph_tags['description'] = $info->description;
 		$open_graph_tags['image']       = (string) $info->image;
 
-		$alt = '';
+		$alt   = '';
 		$metas = $info->getMetas();
 		if ( ! empty( $metas->str( 'og:image:alt' ) ) ) {
 			$alt = $metas->str( 'og:image:alt' );
@@ -30,6 +50,9 @@ function fetch_open_graph( $url ) {
 			$alt = $metas->str( 'twitter:image:alt' );
 		}
 		$open_graph_tags['alt'] = $alt;
+
+		// Cache results.
+		set_transient( $cache_key, $open_graph_tags, CACHE_EXPIRATION );
 	} catch (\Exception $e) {
 		error_log($e->getMessage());
 	}

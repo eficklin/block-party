@@ -36,6 +36,7 @@ export default function Edit({ attributes, setAttributes }) {
 	const [ error, setError ] = useState('');
 
 	useEffect(() => {
+		setError('');
 		if (isURL(url)) {
 			const queryParam = { url }
 			apiFetch({ path: addQueryArgs('/article-preview/v1/open-graph', queryParam) })
@@ -54,48 +55,51 @@ export default function Edit({ attributes, setAttributes }) {
 					}
 				})
 				.catch(() => setError('Could not fetch open graph data for that URL.'));
+		} else {
+			setError(__('Enter a valid URL in the sidebar to get started.', 'article-preview'));
 		}
 	}, [url]);
 
 	return (
 		<>
 			<InspectorControls>
-				<Panel header={ __( 'Settings', 'tesla-takedown' ) }>
+				<Panel header={ __( 'Settings', 'article-preview' ) }>
 					<PanelBody>
 						<PanelRow>
 							<SelectControl
-								label={ __( 'Layout', 'tesla-takedown' ) }
+								label={ __( 'Layout', 'article-preview' ) }
 								value={ layout }
 								options={[
-									{ label: __( 'List', 'tesla-takedown' ), value: 'list' },
-									{ label: __( 'Card', 'tesla-takedown' ), value: 'card' }
+									{ label: __( 'List', 'article-preview' ), value: 'list' },
+									{ label: __( 'Card', 'article-preview' ), value: 'card' }
 								]}
 								onChange={ (value) => setAttributes( { layout: value } ) }
 							/>
 						</PanelRow>
 						<PanelRow>
 							<TextControl
-								label={ __( 'Article URL', 'tesla-takedown' ) }
+								label={ __( 'Article URL', 'article-preview' ) }
 								value={ url }
 								onChange={ ( value ) => setAttributes( { url: value } ) }
+								required
 							/>
 						</PanelRow>
 						<PanelRow>
 							<TextControl
-								label={ __( 'Manual Title', 'tesla-takedown' ) }
+								label={ __( 'Manual Title', 'article-preview' ) }
 								value={ titleOverride }
 								onChange={(value) => setAttributes({ titleOverride: value })}
 							/>
 						</PanelRow>
 						<PanelRow>
 							<TextControl
-								label={ __( 'Manual Description', 'tesla-takedown' ) }
+								label={ __( 'Manual Description', 'article-preview' ) }
 								value={ descriptionOverride }
 								onChange={(value) => setAttributes({ descriptionOverride: value })}
 							/>
 						</PanelRow>
 						<PanelRow>
-							<p>{ __( 'Select or upload a different image from the media library.', 'tesla-takedown' ) }</p>
+							<p>{ __( 'Select or upload a different image from the media library.', 'article-preview' ) }</p>
 						</PanelRow>
 						<PanelRow>
 							<MediaUploadCheck>
@@ -113,7 +117,7 @@ export default function Edit({ attributes, setAttributes }) {
 											onClick={ open }
 											variant="secondary"
 										>
-											{ __( 'Open Media Library', 'tesla-takedown' ) }
+											{ __( 'Open Media Library', 'article-preview' ) }
 										</Button> 
 									)}
 								/>
@@ -124,7 +128,7 @@ export default function Edit({ attributes, setAttributes }) {
 								onClick={() => setAttributes({imageURLOverride: ''})}
 								variant="secondary"
 							>
-								{ __( 'Clear Selection', 'tesla-takedown' ) }
+								{ __( 'Clear Selection', 'article-preview' ) }
 							</Button>
 						</PanelRow>
 						{error && <PanelRow>{ error }</PanelRow>}
@@ -136,7 +140,7 @@ export default function Edit({ attributes, setAttributes }) {
 			}) }>
 				<div className="wrapper">
 					{error ? (
-						<p>{error}</p>
+						<p className="error">{error}</p>
 					) : (
 						<>
 							<div className="image">

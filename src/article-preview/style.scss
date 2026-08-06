@@ -27,6 +27,11 @@
 		transition: background-color 150ms ease;
 	}
 
+	.error {
+		text-align: center;
+		margin-inline: auto;
+	}
+
 	.image {
 		align-self: stretch;
 		overflow: hidden;
