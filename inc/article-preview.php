@@ -5,9 +5,10 @@
 
 namespace BlockParty\ArticlePreview;
 
-const HASH_ALGO = 'sha256'; // Hashing algorithm to use to generate cache keys.
+const HASH_ALGO        = 'sha256'; // Hashing algorithm to use to generate cache keys.
 const CACHE_EXPIRATION = DAY_IN_SECONDS; // Maximum cache lifetime;
-const UA_STRING = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0';
+const UA_STRING        = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0';
+const ABILITY_CATEGORY = 'block-party';
 
 /**
  * Helper for fetching the open graph data from supplied URL.
@@ -115,3 +116,30 @@ function open_graph_endpoint( $request ) {
 
 	return rest_ensure_response( $open_graph_data );
 }
+
+/**
+ * Register an ability for the open graph fetching function.
+ */
+function register_ability() {
+	wp_register_ability(
+		\BlockParty\ABILITY_CATEGORY_SLUG . '/fetch-open-graph',
+		[
+			'label'               => __( 'Fetch Open Graph Tags', 'block-party' ),
+			'description'         => __( 'Fetches open graph tags for given url.', 'block-party' ),
+			'category'            => \BlockParty\ABILITY_CATEGORY_SLUG,
+			'input_schema'        => [
+				'type'   => 'string',
+				'format' => 'uri',
+			],
+			'output_schema'       => [
+				'type' => 'object',
+			],
+			'execute_callback'    => __NAMESPACE__ . '\fetch_open_graph',
+			'permission_callback' => '__return_true',
+			'meta'                => [
+				'show_in_rest' => true,
+			],
+		]
+	);
+}
+add_action( 'wp_abilities_api_init', __NAMESPACE__ . '\register_ability' );

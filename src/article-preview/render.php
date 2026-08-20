@@ -12,7 +12,12 @@ if ( empty( $attributes['url'] ) ) {
 	return;
 }
 
-$og = \BlockParty\ArticlePreview\fetch_open_graph( $attributes['url'] );
+// Option one: call fetch function directly.
+//$og = \BlockParty\ArticlePreview\fetch_open_graph( $attributes['url'] );
+
+// Option two: call fetch function through Abilities API.
+$og_ability = wp_get_ability('block-party/fetch-open-graph');
+$og         = $og_ability->execute( $attributes['url'] );
 
 if ( empty( $og ) ) {
 	return;

@@ -22,6 +22,19 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
+// Register ability category for this plugin.
+const ABILITY_CATEGORY_SLUG = 'block-party';
+function register_ability_category() {
+	wp_register_ability_category( 
+		ABILITY_CATEGORY_SLUG,
+		[
+			'label'       => __( 'Block Party', 'block-party' ),
+			'description' => __( 'Sample block and code snippet library', 'block-party' ),
+		]  
+	);
+}
+add_action( 'wp_abilities_api_categories_init', __NAMESPACE__ . '\register_ability_category' );
+
 // Back-end functionality for Article Preview Block.
 include 'inc/article-preview.php';
 

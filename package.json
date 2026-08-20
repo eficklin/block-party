@@ -15,9 +15,10 @@
 		"start": "wp-scripts start --blocks-manifest"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^34.0.0"
+		"@wordpress/scripts": "^34.1.0"
 	},
 	"dependencies": {
+		"@wordpress/core-abilities": "^0.18.0",
 		"filesize": "^10.1.6"
 	}
 }
